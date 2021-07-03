@@ -11,6 +11,7 @@ const TodoLists = () => {
 
   const [todolists, setTodoLists] = useState([]);
   const [topMessage, setTopMessage] = useState("");
+  const [topError, setTopError] = useState(false);
 
   useEffect(() => {
     fetchDataHandler();
@@ -36,7 +37,13 @@ const TodoLists = () => {
     setTopMessage(message);
   };
 
-  const onTodoAddHandler = (message) => {
+  const onTodoAddHandler = (message, error) => {
+    fetchDataHandler();
+    setTopMessage(message);
+    setTopError(error);
+  };
+
+  const onTodoUpdatedHandler = (message) => {
     fetchDataHandler();
     setTopMessage(message);
   };
@@ -50,6 +57,7 @@ const TodoLists = () => {
         description={list.description}
         todo_items={list.todo_items}
         onTodoListDelete={onTodoListDeleteHandler}
+        onTodoUpdate={onTodoUpdatedHandler}
       ></Todo>
     ));
   }
@@ -57,7 +65,7 @@ const TodoLists = () => {
   return (
     <React.Fragment>
       <h1>Todo Lists</h1>
-      <p className={styles.notice}>{topMessage}</p>
+      <p className={!topError ? styles.notice : styles.errors}>{topMessage}</p>
       <div className={styles.leftbox}>
         <TableHead type="1"></TableHead>
         {defaultList}

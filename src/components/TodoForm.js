@@ -41,12 +41,12 @@ const TodoForm = (props) => {
       if (!response.statusText === "OK") {
         throw new Error("An error has occured");
       } else {
-        props.onAddTodo(response.data.message);
+        props.onAddTodo(response.data.message, false);
         setEnteredTitle("");
         setEnteredDescription("");
       }
     } catch (error) {
-      props.onAddTodo(error.message);
+      props.onAddTodo(error.message, true);
     }
   };
 
