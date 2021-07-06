@@ -138,8 +138,8 @@ const Todo = (props) => {
             </div>
           </div>
         </div>
-        <button onClick={() => onUpdateTodoHander(props.id)}>Update</button>
         <button onClick={closeModal}>Close</button>
+        <button onClick={() => onUpdateTodoHander(props.id)}>Update</button>
       </Modal>
     </React.Fragment>
   );

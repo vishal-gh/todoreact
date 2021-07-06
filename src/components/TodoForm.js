@@ -1,27 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import axios from "axios";
 import styles from "./TodoForm.module.css";
 
 const TodoForm = (props) => {
   const postLink = "http://localhost:4000/api/v1/todo_lists";
-  const [enteredTitle, setEnteredTitle] = useState("");
-  const [enteredDescription, setEnteredDescription] = useState("");
+  const titleInputRef = useRef();
+  const descInputRef = useRef();
   const [errorTitle, setTitleError] = useState(false);
   const [errorDesc, setDescError] = useState(false);
-
-  const titleChangeHandler = (event) => {
-    setEnteredTitle(event.target.value);
-    setTitleError(false);
-  };
-
-  const descriptionChangeHandler = (event) => {
-    setEnteredDescription(event.target.value);
-    setDescError(false);
-  };
 
   const submitHandler = async (event) => {
     event.preventDefault();
     try {
+      const enteredTitle = titleInputRef.current.value;
+      const enteredDescription = descInputRef.current.value;
       if (enteredTitle.length === 0 && enteredDescription.length === 0) {
         setTitleError(true);
         setDescError(true);
@@ -42,8 +34,8 @@ const TodoForm = (props) => {
         throw new Error("An error has occured");
       } else {
         props.onAddTodo(response.data.message, false);
-        setEnteredTitle("");
-        setEnteredDescription("");
+        titleInputRef.current.value = "";
+        descInputRef.current.value = "";
       }
     } catch (error) {
       props.onAddTodo(error.message, true);
@@ -60,10 +52,9 @@ const TodoForm = (props) => {
           <div className={styles.tablecell}>
             <input
               type="text"
-              value={enteredTitle}
-              onChange={titleChangeHandler}
               style={{ width: 400 }}
               className={errorTitle ? styles.error : ""}
+              ref={titleInputRef}
             ></input>
           </div>
         </div>
@@ -73,10 +64,9 @@ const TodoForm = (props) => {
           </div>
           <div className={styles.tablecell}>
             <textarea
-              value={enteredDescription}
-              onChange={descriptionChangeHandler}
               style={{ height: 50, width: 400 }}
               className={errorDesc ? styles.error : ""}
+              ref={descInputRef}
             ></textarea>
           </div>
         </div>
